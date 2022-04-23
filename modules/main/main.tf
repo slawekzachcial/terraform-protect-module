@@ -1,7 +1,3 @@
-variable "prevent_destroy" {
-  default = true
-}
-
 variable "recreate" {
   default = 0
 }
@@ -22,7 +18,11 @@ module "protected" {
 }
 
 resource "null_resource" "module_guardian" {
-  count = var.prevent_destroy ? 1 : 0
+  # Using count: will name resource, if created, null_resource.module_guardian[0]
+  count = var.env == "pro" ? 1 : 0
+
+  # Using for_each: will name resource, if created, null_resource.module_guardian["pro"]
+  # for_each = toset([for e in [var.env] : e if e == "pro"])
 
   triggers = {
     module_output_id = module.protected.id

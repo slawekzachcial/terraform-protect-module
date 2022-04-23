@@ -4,5 +4,4 @@ terraform {
 
 inputs = {
   env = "dev"
-  prevent_destroy = false
 }
