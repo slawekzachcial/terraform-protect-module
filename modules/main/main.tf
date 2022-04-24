@@ -10,7 +10,7 @@ variable "env" {
   type = string
 }
 
-module "protected" {
+module "security_group" {
   source = "../aws_security_group"
 
   name = "TestSecurityGroup-${var.env}-${var.recreate}"
@@ -25,7 +25,7 @@ resource "null_resource" "module_guardian" {
   # for_each = toset([for e in [var.env] : e if e == "pro"])
 
   triggers = {
-    module_output_id = module.protected.id
+    security_group_id = module.security_group.group_id
   }
 
   lifecycle {
