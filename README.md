@@ -2,14 +2,14 @@
 
 Sometimes, when using 3rd party Terraform modules that create crtical resources
 in our infrastructure we want to prevent those resources from being destroyed,
-either du to their replacement or explict call to destroy. Terraform provides
+either due to their replacement or explict call to destroy. Terraform provides
 a mechanism to protect resources, using lifecycle `prevent_destroy` flag. However,
 at the time of this writing (April 2022), similar mechanism does not exist for
 modules.
 
-This repository shows an example, how, under certain conditions, it is possible
-to prevent destroy of resource(s) created by the module. It also demonstrates how
-to prevent destroy in "production" environment while allowing it in "development".
+This repository shows an example, how to, under certain conditions, prevent
+destroy of resource(s) created by the module. It also demonstrates how to
+prevent destroy in "production" environment while allowing it in "development".
 
 ## Protect Module Resource(s)
 
@@ -17,7 +17,7 @@ Demonstrated approach is limited to protect only certain module resources. The
 requirement for the module is to have an output value that would change when the
 resource to be protected is recreated or destroyed. It is possible to protect
 multiple resources as long as the module exposes outputs with those resources'
-recreate/destroy chaning values (e.g. AWS Security Group ID).
+recreate/destroy changing values (e.g. AWS Security Group ID).
 
 The [example module](modules/aws_security_group) creates AWS security group, given
 its name. Updating the name forces the resource to be recreated. The example
@@ -169,7 +169,7 @@ To update the security group's name which results in the group being recreated:
 (cd config/pro && terragrunt apply -var recreate=1)
 ```
 
-This operation fails as it also causes `null_resource.module_guardian` to be
+This operation fails as it causes `null_resource.module_guardian` to be
 re-created first but the resource is protected by `prevent_destroy`.
 
 Finally, to destroy the resources:
@@ -178,6 +178,6 @@ Finally, to destroy the resources:
 (cd config/pro && terragrunt destroy)
 ```
 
-This operation fails as it also causes `null_resource.module_guardian` to be
+This operation fails as it causes `null_resource.module_guardian` to be
 destroyed first but the resource is protected by `prevent_destroy`.
 
